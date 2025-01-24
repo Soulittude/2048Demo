@@ -18,16 +18,42 @@ public class GameManager : MonoBehaviour
 
     private List<Node> nodes;
     private List<Block> blocks;
+    private GameState state;
+    private int round;
 
     private BlockType GetBlockTypeByValue(int val) => types.First(t => t.Value == val);
 
     void Start()
     {
-        GenerateGrid();
+        ChangeState(GameState.GenerateLevel);
+    }
+
+    private void ChangeState(GameState newState)
+    {
+        state = newState;
+
+        switch (newState)
+        {
+            case GameState.GenerateLevel:
+                GenerateGrid();
+                break;
+            case GameState.SpawningBlocks:
+                SpawnBlocks(round++ == 0 ? 2 : 1);
+                break;
+            case GameState.WaitingInputs:
+                break;
+            case GameState.Moving:
+                break;
+            case GameState.Win:
+                break;
+            case GameState.Lose:
+                break;
+        }
     }
 
     void GenerateGrid()
     {
+        round = 0;
         nodes = new List<Node>();
         blocks = new List<Block>();
         for (int x = 0; x < width; x++)
@@ -46,7 +72,7 @@ public class GameManager : MonoBehaviour
 
         Camera.main.transform.position = new Vector3(center.x, center.y, -10);
 
-        SpawnBlocks(2);
+        ChangeState(GameState.SpawningBlocks);
     }
 
     void SpawnBlocks(int amount)
@@ -74,4 +100,14 @@ public struct BlockType
 {
     public int Value;
     public Color Color;
+}
+
+public enum GameState
+{
+    GenerateLevel,
+    SpawningBlocks,
+    WaitingInputs,
+    Moving,
+    Win,
+    Lose
 }
