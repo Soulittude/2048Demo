@@ -6,8 +6,11 @@ using UnityEngine;
 public class Block : MonoBehaviour
 {
     public int _value;
-    public Vector2 pos => transform.position;
     public Node _node;
+    public Block mergingBlock;
+    public bool merging;
+
+    public Vector2 pos => transform.position;
 
     [SerializeField] private SpriteRenderer sRenderer;
     [SerializeField] private TextMeshPro _text;
@@ -21,10 +24,21 @@ public class Block : MonoBehaviour
 
     public void SetBlock(Node node)
     {
-        if(_node != null)
+        if (_node != null)
             _node.occupiedBlock = null;
 
         _node = node;
         _node.occupiedBlock = this;
     }
+
+    public void MergeBlock(Block blockToMergeWith)
+    {
+        mergingBlock = blockToMergeWith;
+
+        _node.occupiedBlock = null;
+
+        blockToMergeWith.merging = true;
+    }
+
+    public bool CanMerge(int val) => val == _value && !merging && mergingBlock == null;
 }
