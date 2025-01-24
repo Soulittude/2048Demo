@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening;
 using Unity.VisualScripting;
 using UnityEngine;
 using Random = UnityEngine.Random; //GOLDEN LINE
@@ -15,6 +16,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private Block blockPrefab;
     [SerializeField] private SpriteRenderer boardPrefab;
     [SerializeField] private List<BlockType> types;
+    [SerializeField] private float travelTime = 0.2f;
 
     private List<Node> nodes;
     private List<Block> blocks;
@@ -51,6 +53,17 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    void Update()
+    {
+        if (state != GameState.WaitingInputs)
+            return;
+
+        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            ShiftBlocks(Vector2.left);
+        }
+    }
+
     void GenerateGrid()
     {
         round = 0;
@@ -83,7 +96,8 @@ public class GameManager : MonoBehaviour
         {
             var block = Instantiate(blockPrefab, node.pos, Quaternion.identity);
             block.Init(GetBlockTypeByValue(Random.value > 0.8f ? 4 : 2));
-            //blocks.Add(block);
+            block.SetBlock(node);
+            blocks.Add(block);
         }
 
         if (freeNodes.Count() == 1)
@@ -91,6 +105,42 @@ public class GameManager : MonoBehaviour
             //Lost game
             return;
         }
+
+        ChangeState(GameState.WaitingInputs);
+    }
+
+    void ShiftBlocks(Vector2 dir)
+    {
+        var orderedBlocks = blocks.OrderBy(b => b.pos.x).ThenBy(b => b.pos.y).ToList();
+
+        if (dir == Vector2.right || dir == Vector2.up)
+            orderedBlocks.Reverse();
+
+        foreach (var block in orderedBlocks)
+        {
+            var next = block._node;
+            do
+            {
+                block.SetBlock(next);
+
+                var possibleNode = GetNodeAtPosition(next.pos + dir);
+                if (possibleNode != null)
+                {
+                    if (possibleNode.occupiedBlock == null)
+                        next = possibleNode;
+                }
+
+            } while (next != block._node);
+
+            block.transform.DOMove(block._node.pos, travelTime);
+        }
+
+
+    }
+
+    Node GetNodeAtPosition(Vector2 pos)
+    {
+        return nodes.FirstOrDefault(n => n.pos == pos);
     }
 
 }

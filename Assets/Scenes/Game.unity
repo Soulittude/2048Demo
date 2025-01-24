@@ -155,7 +155,31 @@ MonoBehaviour:
   width: 4
   height: 4
   nodePrefab: {fileID: 1555082404743226570, guid: c5830acb0886a09488e913ecd590798e, type: 3}
+  blockPrefab: {fileID: 1417951021088136905, guid: cecec219937a19d49bfb0b4ef9983181, type: 3}
   boardPrefab: {fileID: 6709046079306995046, guid: 82ee2d58c11c001438c33e77353e5984, type: 3}
+  types:
+  - Value: 2
+    Color: {r: 0.764151, g: 0.7136327, b: 0.12615699, a: 1}
+  - Value: 4
+    Color: {r: 0.13333334, g: 0.33333334, b: 0.33333334, a: 1}
+  - Value: 8
+    Color: {r: 0.09344961, g: 0.7924528, b: 0.38624105, a: 1}
+  - Value: 16
+    Color: {r: 0.14159843, g: 0.8113208, b: 0.68038154, a: 1}
+  - Value: 32
+    Color: {r: 0.19624424, g: 0.8054109, b: 0.9245283, a: 1}
+  - Value: 64
+    Color: {r: 0.13082945, g: 0.3813457, b: 0.7924528, a: 1}
+  - Value: 128
+    Color: {r: 0.20365335, g: 0.12922749, b: 0.8301887, a: 1}
+  - Value: 256
+    Color: {r: 0.544254, g: 0.15881987, b: 0.7830189, a: 1}
+  - Value: 512
+    Color: {r: 0.735849, g: 0.10065861, b: 0.70117956, a: 1}
+  - Value: 1028
+    Color: {r: 0.7075472, g: 0.14351194, b: 0.38217327, a: 1}
+  - Value: 2048
+    Color: {r: 0.7075472, g: 0.056737285, b: 0.056737285, a: 1}
 --- !u!4 &120076161
 Transform:
   m_ObjectHideFlags: 0
@@ -277,7 +301,7 @@ Camera:
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 3
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
