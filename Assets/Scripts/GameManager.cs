@@ -17,6 +17,10 @@ public class GameManager : MonoBehaviour
     [SerializeField] private SpriteRenderer boardPrefab;
     [SerializeField] private List<BlockType> types;
     [SerializeField] private float travelTime = 0.2f;
+    [SerializeField] private int winCondition = 2048;
+
+    [SerializeField] private GameObject winScreen, loseScreen;
+
 
     private List<Node> nodes;
     private List<Block> blocks;
@@ -47,8 +51,10 @@ public class GameManager : MonoBehaviour
             case GameState.Moving:
                 break;
             case GameState.Win:
+                winScreen.SetActive(true);
                 break;
             case GameState.Lose:
+                loseScreen.SetActive(true);
                 break;
         }
     }
@@ -106,11 +112,11 @@ public class GameManager : MonoBehaviour
 
         if (freeNodes.Count() == 1)
         {
-            //Lost game
+            ChangeState(GameState.Lose);
             return;
         }
 
-        ChangeState(GameState.WaitingInputs);
+        ChangeState(blocks.Any(b =>b._value == winCondition) ? GameState.Win : GameState.WaitingInputs);
     }
 
     void SpawnBlock(Node node, int value)
